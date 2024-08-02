@@ -40,7 +40,7 @@ const createCategory = async (
 ) => {
   try {
     const { name } = req.body;
-    if (!name || name?.length < 7) {
+    if (!name || name?.length < 4) {
       return res.status(400).json({
         data: null,
         message: "you must enter a category title with lenght more than 7",

@@ -2,6 +2,13 @@ import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import customAxios from "../../../utils/axios/customAxios";
 import ZoomedImageStatic from "../../zooomedImage/ZoomedImageStatic";
+import {
+  FaChevronDown,
+  FaChevronUp,
+  FaPlus,
+  FaTrash,
+  FaX,
+} from "react-icons/fa6";
 
 const AdminProductsAddRight = () => {
   const [categories, setCategories] = useState([]);
@@ -14,19 +21,23 @@ const AdminProductsAddRight = () => {
       toast.error(error.response.data.message);
     }
   };
+
   useEffect(() => {
     getCategories();
-  });
+  }, []);
 
+  const [sizes, setSizes] = useState([]);
+  const [extras, setExtras] = useState([]);
   const [data, setData] = useState({
     name: "",
     category: "",
     description: "",
-    promotionPercentage: 1,
-    price: 0,
+    basePrice: 0,
     isFeatured: false,
-    images: [],
+    image: null,
     loading: false,
+    sizes: sizes,
+    extras: extras,
   });
   const createProductHandler = async () => {
     try {
@@ -34,20 +45,14 @@ const AdminProductsAddRight = () => {
       const formData = new FormData();
       formData.append("name", data.name);
       formData.append("category", data.category);
-      if (data.images.length != 4) {
+      if (data.image == null) {
         setData({ ...data, loading: false });
-        return toast.error("you must enter 4 images of the product");
+        return toast.error("you must enter the image of the product");
       }
-      for (let i = 0; i < data.images?.length; i++) {
-        formData.append("images", data.images[i]);
-      }
+      formData.append("images", data.image);
       formData.append("description", data.description);
-      formData.append(
-        "promotionPercentage",
-        data.promotionPercentage.toString()
-      );
-      formData.append("price", data.price.toString());
-      formData.append("isFeatured", data.isFeatured.toString());
+      formData.append("basePrice", data.basePrice.toString());
+      // formData.append("isFeatured", data.isFeatured.toString());
       const response = await customAxios.post("/products", formData);
       console.log(response.data);
       toast.success(response.data.message);
@@ -58,8 +63,7 @@ const AdminProductsAddRight = () => {
       toast.error(error.response.data.message);
     }
   };
-
-
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
     <div className="p-6 flex-1">
@@ -97,26 +101,35 @@ const AdminProductsAddRight = () => {
         </select>
       </div>
       <div className="my-3">
-        <p>Images</p>
-
-        <div className="flex gap-2 justify-between my-4">
-          {Array.from(data.images).map((image) => (
-            <>{image ? <ZoomedImageStatic imageSrc={image} /> : null}</>
-          ))}
+        <p>Image</p>
+        <div className="my-4 flex flex-col items-center gap-y-4 justify-center">
+          {data.image ? (
+            <>
+              <ZoomedImageStatic imageSrc={data.image} />
+              <button
+                onClick={() => setData({ ...data, image: null })}
+                className="bg-mainColor text-white px-6 py-2 rounded-xl"
+              >
+                Remove Image
+              </button>
+            </>
+          ) : null}
         </div>
       </div>
       <div className="flex w-full justify-end">
-        <label
-          htmlFor="admin-products-add"
-          className="w-full text-center border-2  py-6  rounded-lg cursor-pointer "
-        >
-          You Must Enter 4 Images Of Your Product
-        </label>
+        {data.image == null && (
+          <label
+            htmlFor="admin-products-add"
+            className="w-full text-center border-2  py-6  rounded-lg cursor-pointer "
+          >
+            You Must Enter An Image Of Your Product
+          </label>
+        )}
         <input
-          multiple
+          multiple={false}
           onChange={(e) => {
             if (e.target.files != null) {
-              setData({ ...data, images: e.target.files as any });
+              setData({ ...data, image: e.target.files[0] as any });
             }
           }}
           className="hidden"
@@ -135,41 +148,71 @@ const AdminProductsAddRight = () => {
         />
       </div>
       <div className="my-3">
-        <p>Promotion Percentage</p>
+        <p>Base Price</p>
         <input
-          type="number"
-          value={data.promotionPercentage}
-          onChange={(e) =>
-            setData({ ...data, promotionPercentage: +e.target.value })
-          }
-          min={1}
-          max={99}
-          placeholder="must be a number between 1 and 99"
-          className="w-full  pl-4 py-2 bg-white focus:outline-none my-2 border-2"
-        />
-      </div>
-      <div className="my-3">
-        <p>Price</p>
-        <input
-          onChange={(e) => setData({ ...data, price: +e.target.value })}
+          onChange={(e) => setData({ ...data, basePrice: +e.target.value })}
           type="text"
-          placeholder="$1200"
+          placeholder="$12"
           className="w-full pl-4 py-2 bg-white focus:outline-none my-2 border-2"
         />
       </div>
-      <div className="my-3">
-        <p>Price After Discount</p>
-        <input
-          disabled
-          value={(+data.price * (1 - +data.promotionPercentage / 100)).toFixed(
-            2
+      <div className="bg-gray-200 p-2 rounded-md mb-2">
+        <button
+          onClick={() => setIsOpen((prev) => !prev)}
+          className="flex items-center gap-2 p-1 border-0 justify-start"
+          type="button"
+        >
+          {isOpen && <FaChevronUp />}
+          {!isOpen && <FaChevronDown />}
+          <span>{"sizes"}</span>
+          <span>({sizes.length})</span>
+        </button>
+        <div className={isOpen ? "block" : "hidden"}>
+          {sizes.length > 0 && (
+            <>
+              <div className="flex items-end gap-2">
+                <div>
+                  <label>Name</label>
+                  <input
+                    type="text"
+                    placeholder="Size name"
+                    value={20}
+                    // onChange={(ev) => editProp(ev, index, "name")}
+                  />
+                </div>
+                <div>
+                  <label>Extra price</label>
+                  <input
+                    type="text"
+                    placeholder="Extra price"
+                    value={20}
+                    // onChange={(ev) => editProp(ev, index, "price")}
+                  />
+                </div>
+                <div>
+                  <button type="button" className="bg-white mb-2 px-2">
+                    <FaTrash />
+                  </button>
+                </div>
+              </div>
+            </>
           )}
-          type="text"
-          placeholder="$900"
-          className="w-full opacity-50 cursor-not-allowed pl-4 py-2 bg-white focus:outline-none my-2 border-2"
-        />
+          <div className="flex gap-6 my-4">
+            <input type="text" placeholder="name" className="flex-1" />
+            <input type="text" placeholder="size" className="flex-1"/>
+          </div>
+          <button
+            type="button"
+            // onClick={addProp}
+            className="bg-white items-center w-full flex justify-center gap-2 py-2"
+          >
+            <FaPlus className=" h-4" />
+            <span>{"add Item Size"}</span>
+          </button>
+        </div>
       </div>
-      <div className="my-3 mt-6 flex justify-between items-center">
+
+      {/* <div className="my-3 mt-6 flex justify-between items-center">
         <p className="">Is Featured</p>
         <div
           onClick={() => setData({ ...data, isFeatured: !data.isFeatured })}
@@ -185,13 +228,13 @@ const AdminProductsAddRight = () => {
             } duration-300`}
           ></span>
         </div>
-      </div>
+      </div> */}
       <div className="flex w-full justify-end">
         <button
           disabled={
             data.category == "" ||
             data.description == "" ||
-            data.images.length != 4 ||
+            data.image == null ||
             data.loading
           }
           onClick={() => createProductHandler()}

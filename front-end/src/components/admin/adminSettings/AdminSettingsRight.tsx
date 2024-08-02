@@ -41,12 +41,11 @@ const AdminSettingsRight = () => {
   return (
     <>
       <div
-        className="container py-16"
+        className="container "
         style={{ minHeight: "calc(100vh - 70.94px)" }}
       >
-        <div className="my-10 rounded-xl border-2 border-mainColor p-3">
-          <p className="border-b-2 pb-1 font-bold">Account Settings</p>
-          <div className="flex flex-col-reverse items-center justify-between gap-x-32 px-4 py-6 sm:flex-row">
+        <div className="my-10 rounded-xl  p-3">
+            <div className="flex flex-col-reverse  items-center justify-between gap-x-32 px-4 py-6 sm:flex-row-reverse">
             <div className="flex w-full flex-col gap-3">
               <div className="flex flex-col gap-1">
                 <label htmlFor="username">Username: </label>
@@ -165,19 +164,7 @@ const AdminSettingsRight = () => {
             </button>
           </div>
         )} */}
-        <div className="flex items-center justify-end">
-          {user && (
-            <button
-              onClick={() => logoutHandler()}
-              className="flex items-center gap-4 rounded-xl bg-mainColor px-6 py-2    text-white"
-            >
-              Logout
-              <span className="text-2xl">
-                <FaPersonWalkingArrowRight />
-              </span>
-            </button>
-          )}
-        </div>
+        
       </div>
     </>
   );

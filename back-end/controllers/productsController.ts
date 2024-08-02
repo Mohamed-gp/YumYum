@@ -217,6 +217,75 @@ const toggleWishlist = async (
   }
 };
 
+/**
+ *
+ * @method GET
+ * @route /api/sizes
+ * @access public
+ * @desc get default sizes
+ *
+ */
+const getSizes = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    let { search, category, newArrivals } = req.query;
+    if (search && search != "") {
+      const products = await Product.find({
+        name: { $regex: search, $options: "i" },
+      }).populate("category");
+      return res.status(200).json({
+        message: "fetched Successfully",
+        data: products,
+      });
+    }
+    if (newArrivals == "true") {
+      const products = await Product.find()
+        .sort({ createdAt: -1 })
+        .populate("category");
+      return res.status(200).json({
+        message: "fetched Successfully",
+        data: products,
+      });
+    }
+    if (category && category != "") {
+      // const products = await Product.aggregate([
+      //   {
+      //     $lookup: {
+      //       from: "categories",
+      //       localField: "category",
+      //       foreignField: "_id",
+      //       as: "categoryInfo",
+      //     },
+      //   },
+      //   {
+      //     $unwind: "$categoryInfo",
+      //   },
+      //   {
+      //     $match: {
+      //       "categoryInfo.name": category,
+      //     },
+      //   },
+      // ]);
+      if (typeof category == "string") {
+        category = category.replace("+", " ");
+      }
+      const products = await Product.find({}).populate("category");
+      const filteredProducts = products.filter(
+        (product) => product.category.name == category
+      );
+      return res.status(200).json({
+        message: "fetched Successfully",
+        data: filteredProducts,
+      });
+    }
+
+    const products = await Product.find().populate("category");
+    return res
+      .status(200)
+      .json({ message: "fetched successfully", data: products });
+  } catch (error) {
+    next(error);
+  }
+};
 export {
   getAllProducts,
   createProduct,

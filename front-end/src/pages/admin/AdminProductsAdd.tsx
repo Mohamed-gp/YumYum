@@ -3,7 +3,7 @@ import AdminProductsAddRight from "../../components/admin/adminProducts/AdminPro
 
 const AdminProductsAdd = () => {
   return (
-    <div className="flex min-h-screen">
+    <div className="flex flex-col container min-h-screen">
       <AdminSideBar />
       <AdminProductsAddRight />
     </div>

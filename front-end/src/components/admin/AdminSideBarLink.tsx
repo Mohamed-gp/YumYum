@@ -9,7 +9,7 @@ const AdminSideBarLink = ({ link }: AdminSideBarLinkProps) => {
   return (
     <NavLink
       to={`/admin/${link}`}
-      className="flex lg:flex lg:justify-normal justify-center lg:gap-1 p-2 admin-nav-link items-center  rounded-xl"
+      className="flex lg:flex lg:justify-normal justify-center lg:gap-1 px-6 py-2 admin-nav-link items-center  rounded-xl"
     >
       {link}
     </NavLink>

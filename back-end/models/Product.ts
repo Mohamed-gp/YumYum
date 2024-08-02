@@ -1,28 +1,52 @@
 import mongoose from "mongoose";
 
-const schema = new mongoose.Schema(
+const sizeSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  cost: {
+    type: Number,
+    required: true,
+    min: 0,
+  },
+});
+
+const extrasSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  cost: {
+    type: Number,
+    required: true,
+    min: 0,
+  },
+});
+
+const productSchema = new mongoose.Schema(
   {
     name: {
       type: String,
       required: true,
+      trim: true,
     },
     description: {
       type: String,
       required: true,
+      trim: true,
     },
-    price: {
+    basePrice: {
       type: Number,
       required: true,
+      min: 0,
     },
-    promoPercentage: {
-      type: Number,
+    image: {
+      type: String,
       required: true,
-      min: 1,
-      max: 99,
-    },
-    images: {
-      type: [String],
-      required: true,
+      trim: true,
     },
     isFeatured: {
       type: Boolean,
@@ -34,16 +58,29 @@ const schema = new mongoose.Schema(
       ref: "Category",
       required: true,
     },
-    comments: [
-      {
-        type: [mongoose.Schema.ObjectId],
-        ref: "Comment",
-      },
-    ],
+    sizes: {
+      type: [sizeSchema],
+      // validate: {
+      //   validator: function (sizes: any) {
+      //     return sizes.length > 0;
+      //   },
+      //   message: "A product must have at least one size option.",
+      // },
+    },
+    extras: {
+      type: [extrasSchema],
+      // validate: {
+      //   validator: function (extras: any) {
+      //     return extras.length > 0;
+      //   },
+      //   message: "A product must have at least one extra option.",
+      // },
+    },
   },
   { timestamps: true }
 );
 
-const Product = mongoose.models.Product || mongoose.model("Product", schema);
+const Product =
+  mongoose.models.Product || mongoose.model("Product", productSchema);
 
 export default Product;

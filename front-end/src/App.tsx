@@ -49,13 +49,13 @@ function App() {
         <Route path="/product/:id" element={<ProductInfo />} />
         <Route path="/admin">
           <Route
-            path="dashboard"
+            path="users"
             element={
               user?.role == "admin" ? <AdminDashboard /> : <Navigate to={"/"} />
             }
           />
           <Route
-            path="products"
+            path="menu"
             element={
               user?.role == "admin" ? <AdminProducts /> : <Navigate to={"/"} />
             }
@@ -96,12 +96,12 @@ function App() {
               user?.role == "admin" ? <AdminCoupons /> : <Navigate to={"/"} />
             }
           /> */}
-          {/* <Route
+          <Route
             path="orders"
             element={
               user?.role == "admin" ? <AdminOrders /> : <Navigate to={"/"} />
             }
-          /> */}
+          />
           <Route
             path="admins"
             element={
@@ -109,7 +109,7 @@ function App() {
             }
           />
           <Route
-            path="settings"
+            path="profile"
             element={
               user?.role == "admin" ? <AdminSettings /> : <Navigate to={"/"} />
             }

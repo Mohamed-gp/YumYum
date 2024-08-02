@@ -121,7 +121,7 @@ table tbody tr::after {
   /* background-color: rgb(129, 190, 0); */
   background-color: #ff7e00;
   color: white;
-  padding: 8px;
+  /* padding: 8px; */
   /* border-radius: 10px 0 0 10px; */
 }
 
