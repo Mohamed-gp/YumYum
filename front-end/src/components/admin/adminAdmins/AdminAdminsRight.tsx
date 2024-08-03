@@ -46,7 +46,7 @@ const AdminAdminsRight = () => {
   }, []);
   return (
     <div className="p-6 flex-1">
-      <p className="lg:text-2xl">Admins </p>
+      <p className="lg:text-2xl">Users</p>
       <div
         className="bg-white p-3 mt-2"
         style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px" }}

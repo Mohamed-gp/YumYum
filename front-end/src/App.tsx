@@ -51,7 +51,7 @@ function App() {
           <Route
             path="users"
             element={
-              user?.role == "admin" ? <AdminDashboard /> : <Navigate to={"/"} />
+              user?.role == "admin" ? <AdminAdmins /> : <Navigate to={"/"} />
             }
           />
           <Route
@@ -60,16 +60,16 @@ function App() {
               user?.role == "admin" ? <AdminProducts /> : <Navigate to={"/"} />
             }
           />
-          <Route
-            path="products/edit/:id"
-            element={
-              user?.role == "admin" ? (
-                <AdminProductsEdit />
-              ) : (
-                <Navigate to={"/"} />
-              )
-            }
-          />
+            {/* <Route
+              path="products/edit/:id"
+              element={
+                user?.role == "admin" ? (
+                  <AdminProductsEdit />
+                ) : (
+                  <Navigate to={"/"} />
+                )
+              }
+            /> */}
           <Route
             path="products/add"
             element={
@@ -96,12 +96,12 @@ function App() {
               user?.role == "admin" ? <AdminCoupons /> : <Navigate to={"/"} />
             }
           /> */}
-          <Route
+          {/* <Route
             path="orders"
             element={
               user?.role == "admin" ? <AdminOrders /> : <Navigate to={"/"} />
             }
-          />
+          /> */}
           <Route
             path="admins"
             element={

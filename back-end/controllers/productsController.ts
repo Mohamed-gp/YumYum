@@ -1,5 +1,6 @@
 import cloudinary from "../config/cloudinary";
 import { NextFunction, Request, Response } from "express";
+import Category from "../models/Category";
 import Product from "../models/Product";
 import User from "../models/User";
 import multer from "multer";
@@ -21,57 +22,6 @@ const getAllProducts = async (
   next: NextFunction
 ) => {
   try {
-    let { search, category, newArrivals } = req.query;
-    if (search && search != "") {
-      const products = await Product.find({
-        name: { $regex: search, $options: "i" },
-      }).populate("category");
-      return res.status(200).json({
-        message: "fetched Successfully",
-        data: products,
-      });
-    }
-    if (newArrivals == "true") {
-      const products = await Product.find()
-        .sort({ createdAt: -1 })
-        .populate("category");
-      return res.status(200).json({
-        message: "fetched Successfully",
-        data: products,
-      });
-    }
-    if (category && category != "") {
-      // const products = await Product.aggregate([
-      //   {
-      //     $lookup: {
-      //       from: "categories",
-      //       localField: "category",
-      //       foreignField: "_id",
-      //       as: "categoryInfo",
-      //     },
-      //   },
-      //   {
-      //     $unwind: "$categoryInfo",
-      //   },
-      //   {
-      //     $match: {
-      //       "categoryInfo.name": category,
-      //     },
-      //   },
-      // ]);
-      if (typeof category == "string") {
-        category = category.replace("+", " ");
-      }
-      const products = await Product.find({}).populate("category");
-      const filteredProducts = products.filter(
-        (product) => product.category.name == category
-      );
-      return res.status(200).json({
-        message: "fetched Successfully",
-        data: filteredProducts,
-      });
-    }
-
     const products = await Product.find().populate("category");
     return res
       .status(200)
@@ -116,28 +66,34 @@ const createProduct = async (
         .status(400)
         .json({ message: error.details[0].message, data: null });
     }
-    const files = req.files as Express.Multer.File[];
-    if (files.length != 4) {
-      return res.status(400).json({
-        message: "you must enter 4 images of the product",
-        data: null,
-      });
+
+    const file = req.file as Express.Multer.File;
+
+    const picture = file?.path;
+    const uploadedPicture = await cloudinary.uploader.upload(picture);
+
+    const pictureUrl = uploadedPicture.url;
+    if (req.body.sizes.length <= 0) {
+      return res
+        .status(400)
+        .json({ message: "size must be a non empty array" });
     }
-    const pictures = files?.map((file) => {
-      return file.path;
-    });
-    const uploadedPictures = await Promise.all(
-      pictures.map((picture) => cloudinary.uploader.upload(picture))
-    );
-    const pictureUrls = uploadedPictures.map((picture) => picture.url);
+    // Array.from(req?.body?.sizes)?.map((size: any) => {
+    //   size.price = +size.price;
+    // });
+    // Array.from(req?.body?.extras).map((extra: any) => {
+    //   extra.price = +extra.price;
+    // });
+
     const product = await Product.create({
       name: req.body.name,
       description: req.body.description,
-      price: +req.body.price,
-      promoPercentage: +req.body.promotionPercentage,
+      basePrice: +req.body.basePrice,
       category: req.body.category,
       isFeatured: req.body.isFeatured,
-      images: pictureUrls,
+      image: pictureUrl,
+      sizes: JSON.parse(req.body.sizes),
+      extras: JSON.parse(req.body.extras),
     });
     return res
       .status(201)
@@ -220,72 +176,29 @@ const toggleWishlist = async (
 /**
  *
  * @method GET
- * @route /api/sizes
+ * @route /api/products/getAllProductsListed
  * @access public
- * @desc get default sizes
+ * @desc get products with categories
  *
  */
-const getSizes = async (req: Request, res: Response, next: NextFunction) => {
+const getAllProductsListed = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
-    let { search, category, newArrivals } = req.query;
-    if (search && search != "") {
-      const products = await Product.find({
-        name: { $regex: search, $options: "i" },
-      }).populate("category");
-      return res.status(200).json({
-        message: "fetched Successfully",
-        data: products,
-      });
+    let categories = await Category.find();
+    let data: any[] = [];
+    for (let i = 0; i < categories.length; i++) {
+      const products = await Product.find({ category: categories[i]._id });
+      data = [...data, { category: categories[i].name, elements: products }];
     }
-    if (newArrivals == "true") {
-      const products = await Product.find()
-        .sort({ createdAt: -1 })
-        .populate("category");
-      return res.status(200).json({
-        message: "fetched Successfully",
-        data: products,
-      });
-    }
-    if (category && category != "") {
-      // const products = await Product.aggregate([
-      //   {
-      //     $lookup: {
-      //       from: "categories",
-      //       localField: "category",
-      //       foreignField: "_id",
-      //       as: "categoryInfo",
-      //     },
-      //   },
-      //   {
-      //     $unwind: "$categoryInfo",
-      //   },
-      //   {
-      //     $match: {
-      //       "categoryInfo.name": category,
-      //     },
-      //   },
-      // ]);
-      if (typeof category == "string") {
-        category = category.replace("+", " ");
-      }
-      const products = await Product.find({}).populate("category");
-      const filteredProducts = products.filter(
-        (product) => product.category.name == category
-      );
-      return res.status(200).json({
-        message: "fetched Successfully",
-        data: filteredProducts,
-      });
-    }
-
-    const products = await Product.find().populate("category");
-    return res
-      .status(200)
-      .json({ message: "fetched successfully", data: products });
+    return res.status(200).json({ data: data, message: "fetched Successfull" });
   } catch (error) {
     next(error);
   }
 };
+
 export {
   getAllProducts,
   createProduct,
@@ -293,4 +206,5 @@ export {
   deleteProduct,
   getFeaturedProducts,
   toggleWishlist,
+  getAllProductsListed,
 };

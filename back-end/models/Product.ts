@@ -6,7 +6,7 @@ const sizeSchema = new mongoose.Schema({
     required: true,
     trim: true,
   },
-  cost: {
+  price: {
     type: Number,
     required: true,
     min: 0,
@@ -19,7 +19,7 @@ const extrasSchema = new mongoose.Schema({
     required: true,
     trim: true,
   },
-  cost: {
+  price: {
     type: Number,
     required: true,
     min: 0,
@@ -60,12 +60,12 @@ const productSchema = new mongoose.Schema(
     },
     sizes: {
       type: [sizeSchema],
-      // validate: {
-      //   validator: function (sizes: any) {
-      //     return sizes.length > 0;
-      //   },
-      //   message: "A product must have at least one size option.",
-      // },
+      validate: {
+        validator: function (size: any) {
+          return size.length > 0;
+        },
+        message: "A product must have at least one size option.",
+      },
     },
     extras: {
       type: [extrasSchema],

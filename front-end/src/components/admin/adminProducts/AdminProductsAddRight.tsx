@@ -9,6 +9,8 @@ import {
   FaTrash,
   FaX,
 } from "react-icons/fa6";
+import AdditionalCreate from "../../additionalCreate/AdditionalCreate";
+import IsFeatured from "../../../components/isFeatured/isFeatured";
 
 const AdminProductsAddRight = () => {
   const [categories, setCategories] = useState([]);
@@ -26,8 +28,8 @@ const AdminProductsAddRight = () => {
     getCategories();
   }, []);
 
-  const [sizes, setSizes] = useState([]);
-  const [extras, setExtras] = useState([]);
+  const [sizes, setSizes] = useState<any>([]);
+  const [extras, setExtras] = useState<any>([]);
   const [data, setData] = useState({
     name: "",
     category: "",
@@ -36,9 +38,10 @@ const AdminProductsAddRight = () => {
     isFeatured: false,
     image: null,
     loading: false,
-    sizes: sizes,
-    extras: extras,
+    sizes,
+    extras,
   });
+
   const createProductHandler = async () => {
     try {
       setData({ ...data, loading: true });
@@ -49,10 +52,12 @@ const AdminProductsAddRight = () => {
         setData({ ...data, loading: false });
         return toast.error("you must enter the image of the product");
       }
-      formData.append("images", data.image);
+      formData.append("image", data.image);
       formData.append("description", data.description);
       formData.append("basePrice", data.basePrice.toString());
-      // formData.append("isFeatured", data.isFeatured.toString());
+      formData.append("isFeatured", data.isFeatured.toString());
+      formData.append("sizes", JSON.stringify(data.sizes));
+      formData.append("extras", JSON.stringify(data.extras));
       const response = await customAxios.post("/products", formData);
       console.log(response.data);
       toast.success(response.data.message);
@@ -63,7 +68,12 @@ const AdminProductsAddRight = () => {
       toast.error(error.response.data.message);
     }
   };
-  const [isOpen, setIsOpen] = useState(false);
+  useEffect(() => {
+    setData({ ...data, sizes });
+  }, [sizes]);
+  useEffect(() => {
+    setData({ ...data, extras });
+  }, [extras]);
 
   return (
     <div className="p-6 flex-1">
@@ -89,14 +99,16 @@ const AdminProductsAddRight = () => {
         >
           <option
             value={""}
-            selected={data.category == ""}
+            defaultValue={""}
             className="disabled:opacity-50"
             disabled
           >
             Enter The Category That Match Your Product
           </option>
-          {categories?.map((category) => (
-            <option value={category?._id}>{category?.name}</option>
+          {categories?.map((category, index) => (
+            <option key={category?._id + index} value={category?._id}>
+              {category?.name}
+            </option>
           ))}
         </select>
       </div>
@@ -120,7 +132,7 @@ const AdminProductsAddRight = () => {
         {data.image == null && (
           <label
             htmlFor="admin-products-add"
-            className="w-full text-center border-2  py-6  rounded-lg cursor-pointer "
+            className="w-full text-center border  py-6 border-mainColor rounded-lg cursor-pointer "
           >
             You Must Enter An Image Of Your Product
           </label>
@@ -139,7 +151,10 @@ const AdminProductsAddRight = () => {
         />
       </div>
       <div className="my-3">
-        <p>Description</p>
+        <div className="flex justify-between">
+          <p>Description</p>
+          <span>{data?.description?.length} caracteres</span>
+        </div>
         <textarea
           value={data.description}
           onChange={(e) => setData({ ...data, description: e.target.value })}
@@ -156,85 +171,20 @@ const AdminProductsAddRight = () => {
           className="w-full pl-4 py-2 bg-white focus:outline-none my-2 border-2"
         />
       </div>
-      <div className="bg-gray-200 p-2 rounded-md mb-2">
-        <button
-          onClick={() => setIsOpen((prev) => !prev)}
-          className="flex items-center gap-2 p-1 border-0 justify-start"
-          type="button"
-        >
-          {isOpen && <FaChevronUp />}
-          {!isOpen && <FaChevronDown />}
-          <span>{"sizes"}</span>
-          <span>({sizes.length})</span>
-        </button>
-        <div className={isOpen ? "block" : "hidden"}>
-          {sizes.length > 0 && (
-            <>
-              <div className="flex items-end gap-2">
-                <div>
-                  <label>Name</label>
-                  <input
-                    type="text"
-                    placeholder="Size name"
-                    value={20}
-                    // onChange={(ev) => editProp(ev, index, "name")}
-                  />
-                </div>
-                <div>
-                  <label>Extra price</label>
-                  <input
-                    type="text"
-                    placeholder="Extra price"
-                    value={20}
-                    // onChange={(ev) => editProp(ev, index, "price")}
-                  />
-                </div>
-                <div>
-                  <button type="button" className="bg-white mb-2 px-2">
-                    <FaTrash />
-                  </button>
-                </div>
-              </div>
-            </>
-          )}
-          <div className="flex gap-6 my-4">
-            <input type="text" placeholder="name" className="flex-1" />
-            <input type="text" placeholder="size" className="flex-1"/>
-          </div>
-          <button
-            type="button"
-            // onClick={addProp}
-            className="bg-white items-center w-full flex justify-center gap-2 py-2"
-          >
-            <FaPlus className=" h-4" />
-            <span>{"add Item Size"}</span>
-          </button>
-        </div>
-      </div>
-
-      {/* <div className="my-3 mt-6 flex justify-between items-center">
-        <p className="">Is Featured</p>
-        <div
-          onClick={() => setData({ ...data, isFeatured: !data.isFeatured })}
-          className={`relative justify-center items-center ${
-            data.isFeatured ? "bg-mainColor" : "bg-mainColor/20"
-          } w-[70px] h-[30px] rounded-xl py-1`}
-        >
-          <span
-            className={`w-4 h-4 rounded-full absolute ${
-              data.isFeatured ? "right-2" : "right-10"
-            } top-1/2 -translate-y-1/2 ${
-              data.isFeatured ? "bg-white" : "bg-mainColor"
-            } duration-300`}
-          ></span>
-        </div>
-      </div> */}
+      <AdditionalCreate data={sizes} setData={setSizes} name={"Size"} />
+      <AdditionalCreate
+        data={extras}
+        setData={setExtras}
+        name={"Extra Engredient"}
+      />
+      <IsFeatured data={data} setData={setData} />
       <div className="flex w-full justify-end">
         <button
           disabled={
             data.category == "" ||
             data.description == "" ||
             data.image == null ||
+            data.sizes.length == 0 ||
             data.loading
           }
           onClick={() => createProductHandler()}

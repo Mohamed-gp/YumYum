@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { FaEdit } from "react-icons/fa";
-import { FaTrash } from "react-icons/fa6";
+import { FaTrash, FaX } from "react-icons/fa6";
 import { Link } from "react-router-dom";
 import customAxios from "../../../utils/axios/customAxios";
 import toast from "react-hot-toast";
@@ -41,33 +41,22 @@ const AdminProductsRight = () => {
           Add New Product
         </Link>
       </div>
-      <div className="p-3 mt-2">
+      <div className="p-3 mt-2 flex justify-evenly">
         {products?.length == 0 ? (
           <p className="text-center my-6">There Is No Menu Item</p>
         ) : (
           products?.map((product) => (
-            <div className="flex justify-between mb-4">
-              <div className="flex items-center">
-                <p className="pl-4">{product?.name}</p>
-              </div>
-              <div className="flex items-center gap-4 pr-4 ">
-                {/* <Link
-                to={`/admin/products/edit/${product?._id}`}
-                className="flex items-center gap-2  py-2 px-4  "
-                style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px" }}
-              >
-                <FaEdit />
-                <span>Edit</span>
-              </Link> */}
-                <button
-                  onClick={() => deleteHandler(product._id)}
-                  className="flex items-center gap-2 bg-red-500 py-2 px-4 text-white"
-                  style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px" }}
-                >
-                  <FaTrash />
-                  <span>Delete</span>
-                </button>
-              </div>
+            <div
+              style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px" }}
+              className="lg:w-[24%] relative bg-white p-6  text-center rounded-xl flex flex-col  justify-center items-center"
+            >
+              <img src={product.image} className="w-[200px] " alt="" />
+              <p className="font-bold text-xl line-clamp-3">{product?.name}</p>
+              <p className="opacity-50">{product.price}</p>
+              <FaX
+                className="absolute -right-2 -top-2 p-1 text-3xl cursor-pointer bg-white rounded-full text-red-500"
+                onClick={() => deleteHandler(product._id)}
+              />
             </div>
           ))
         )}

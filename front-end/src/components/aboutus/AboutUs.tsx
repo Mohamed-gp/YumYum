@@ -2,9 +2,9 @@ import SectionHeaders from "../SectionHeaders/SectionHeaders";
 
 const AboutUs = () => {
   return (
-    <section className="my-12 container text-center">
-      <SectionHeaders title={"Our Story"} />
-      <p className="w-[600px] mx-auto leading-relaxed opacity-50 mt-2">
+    <section id="aboutUs" className="my-12 container text-center">
+      <SectionHeaders title={"About Us"} />
+      <p className="max-w-[600px] mx-auto leading-relaxed opacity-50 mt-2">
         The idea for YumYum was born from our love for food and a desire to
         share the world's culinary delights. As passionate food enthusiasts, we
         enjoyed exploring new recipes and cuisines but struggled to find

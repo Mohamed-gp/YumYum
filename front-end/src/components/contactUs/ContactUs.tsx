@@ -4,7 +4,7 @@ import SectionHeaders from "../SectionHeaders/SectionHeaders";
 
 const ContactUs = () => {
   return (
-    <section className="my-12">
+    <section className="my-12" id="contactUs">
       <div className="container px-6 py-12 mx-auto">
         <SectionHeaders title="Contact Us" />
 

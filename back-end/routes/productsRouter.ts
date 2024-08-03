@@ -6,6 +6,7 @@ import {
   getProduct,
   getFeaturedProducts,
   toggleWishlist,
+  getAllProductsListed,
 } from "../controllers/productsController";
 import { verifyToken, verifyAdmin } from "../middlewares/verifyToken";
 import upload from "../config/multer";
@@ -16,7 +17,8 @@ const router = Router();
 router
   .route("/")
   .get(getAllProducts)
-  .post(upload.array("images"), verifyToken, verifyAdmin, createProduct);
+  .post(upload.single("image"), verifyToken, verifyAdmin, createProduct);
+router.route("/listed").get(getAllProductsListed);
 router.route("/featured").get(getFeaturedProducts);
 router.route("/wishlist").post(verifyToken, toggleWishlist);
 router

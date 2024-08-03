@@ -18,10 +18,10 @@ const AdminSideBar = () => {
       <AdminSideBarLink link="Profile" />
       <AdminSideBarLink link="Categories" />
       <AdminSideBarLink link="Menu" />
-      <AdminSideBarLink link="Users" />
+      <AdminSideBarLink link="users" />
       {/* <AdminSideBarLink link="coupons" icon={<RiCoupon3Fill />} /> */}
       {/* <AdminSideBarLink link="orders" icon={<FaBasketShopping />} /> */}
-      <AdminSideBarLink link="Orders" />
+      {/* <AdminSideBarLink link="Orders" /> */}
       {/* <AdminLogoutButton /> */}
     </nav>
   );

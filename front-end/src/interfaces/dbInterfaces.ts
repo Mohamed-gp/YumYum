@@ -5,7 +5,7 @@ interface Product {
   promoPercentage: number;
   category: Category;
   description: string;
-  images: string[];
+  image: string;
   comments: object[];
 }
 
