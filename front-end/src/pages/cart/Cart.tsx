@@ -6,13 +6,11 @@ import { authActions } from "../../redux/slices/authSlice";
 import { Link, useNavigate } from "react-router-dom";
 import customAxios from "../../utils/axios/customAxios";
 import toast from "react-hot-toast";
-import ZoomedImageStatic from "../../components/zooomedImage/ZoomedImageStatic";
 
 export default function Cart() {
   const cart: any[] = useSelector((state: IRootState) => state.auth.user?.cart);
   const user = useSelector((state: IRootState) => state.auth.user);
   const dispatch = useDispatch();
-  const [coupon, setCoupon] = useState("");
   const removeFromCartHandler = async (userId: string, productId: string) => {
     try {
       const { data } = await customAxios.delete(

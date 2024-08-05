@@ -27,7 +27,7 @@ app.use(
     origin:
       process.env.NODE_ENV == "developement"
         ? "http://localhost:5173"
-        : "https://socialsync.netlify.app",
+        : "https://social-sync1.netlify.app",
     // origin: "http://localhost:5173",
     credentials: true,
   })

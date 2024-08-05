@@ -4,7 +4,7 @@ const env: string = "developement";
 const customAxios = axios.create({
   baseURL:
     env == "production"
-      ? "https://socialsync.onrender.com/api/"
+      ? "https://socialsync-qw94.onrender.com/api/"
       : "http://localhost:3000/api/",
   withCredentials: true,
 });
