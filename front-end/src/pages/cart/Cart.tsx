@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { FaArrowRight, FaTrash, FaXmark } from "react-icons/fa6";
+import { FaArrowRight, FaRegTrashCan, FaTrash, FaXmark } from "react-icons/fa6";
 import { useDispatch, useSelector } from "react-redux";
 import { IRootState } from "../../redux/store";
 import { authActions } from "../../redux/slices/authSlice";
@@ -11,10 +11,10 @@ export default function Cart() {
   const cart: any[] = useSelector((state: IRootState) => state.auth.user?.cart);
   const user = useSelector((state: IRootState) => state.auth.user);
   const dispatch = useDispatch();
-  const removeFromCartHandler = async (userId: string, productId: string) => {
+  const removeFromCartHandler = async (userId: string, cartId: string) => {
     try {
       const { data } = await customAxios.delete(
-        `/cart/delete/${userId}/${productId}`
+        `/cart/delete/${userId}/${cartId}`
       );
       dispatch(authActions.setCart(data.data));
       toast.success(data.message);
@@ -29,6 +29,8 @@ export default function Cart() {
       const { data } = await customAxios.post("/checkout", { cart });
       // window.open(data.data, "_blank");
       window.open(data.data, "_self");
+
+      // to do when the payement is successfull
       // dispatch(authActions.setCart([]));
     } catch (error: any) {
       console.log(error);
@@ -36,11 +38,18 @@ export default function Cart() {
     }
   };
 
-  const addToCart = async (quantity: number, productId: string) => {
+  const addToCartHandler = async (
+    quantity: number,
+    productId: string,
+    sizeName: string,
+    extrasName: string[]
+  ) => {
     try {
       const { data } = await customAxios.post("/cart/add", {
         userId: user._id,
-        productId: productId,
+        productId,
+        sizeName,
+        extrasName,
         quantity,
       });
       dispatch(authActions.setCart(data.data));
@@ -50,31 +59,39 @@ export default function Cart() {
       toast.error(error.response.data.message);
     }
   };
-  const couponHandler = () => {
-    toast.error("invalid copoun");
-    setCoupon("");
+  // const couponHandler = () => {
+  //   toast.error("invalid copoun");
+  //   setCoupon("");
+  // };
+  const calculateAmountHandler = (ele: any) => {
+    let amount = ele?.product?.basePrice;
+
+    ele.product.sizes.map((size: any) => {
+      if (size.name == ele.sizeName) {
+        amount = amount + size.price;
+      }
+    });
+    ele.product.extras.map((extra: any) => {
+      ele.extrasName.map((exName: string) => {
+        if (extra.name == exName) {
+          amount = amount + extra.price;
+        }
+      });
+    });
+
+    return amount;
   };
 
   return (
     <>
       {cart?.length != 0 ? (
         <>
-          <div>
+          <div className="" style={{ minHeight: "calc(100vh - 250px)" }}>
             <p className="my-6 mt-12 text-center text-xl font-bold">
               My Shopping Cart
             </p>
-            <div className="w-[400px] sm:w-screen mx-auto overflow-auto">
-              <table className=" mb-24 mt-12 w-screen ">
-                <thead className="bg-mainColor py-2 text-white">
-                  <tr className="">
-                    <th>Product Image</th>
-                    <th>Name</th>
-                    <th>Price</th>
-                    <th>Quanity</th>
-                    <th>Subtotal</th>
-                    <th className="">Action</th>
-                  </tr>
-                </thead>
+            <div className="container  ">
+              <table className=" w-full ">
                 <tbody>
                   {cart?.map((ele) => (
                     <tr className="relative">
@@ -82,7 +99,7 @@ export default function Cart() {
                         <div className="mx-auto w-fit">
                           {/* <ZoomedImageStatic imageSrc={ele?.product?.images[0]} /> */}
                           <img
-                            src={ele?.product?.images[0]}
+                            src={ele?.product?.image}
                             alt="mac"
                             width={100}
                             height={100}
@@ -90,33 +107,46 @@ export default function Cart() {
                         </div>
                       </td>
                       <td>
-                        <p>{ele?.product?.name}</p>
+                        <div className="flex flex-col">
+                          <p>
+                            {ele?.product?.name} ({ele?.sizeName})
+                          </p>
+                          <p>
+                            {ele?.extrasName?.map((size) => {
+                              return ` +${size}`;
+                            })}
+                          </p>
+                        </div>
                       </td>
-                      <td>
-                        $
-                        {(
-                          ele?.product?.price *
-                          (1 - ele?.product?.promoPercentage / 100)
-                        ).toFixed(2)}
-                      </td>
+                      <td>${calculateAmountHandler(ele).toFixed(2)}</td>
 
                       <td className="">
                         <div className="flex w-fit mx-auto  bg-white border-2 border-solid p-2 rounded-3xl items-center gap-2">
                           <button
                             onClick={() =>
-                              addToCart(ele.quantity - 1, ele?.product?._id)
+                              addToCartHandler(
+                                ele?.quantity - 1,
+                                ele?.product?._id,
+                                ele.sizeName,
+                                ele.extrasName
+                              )
                             }
                             disabled={ele?.quantity == 1}
-                            className="bg-[#dadada] w-7 h-7 disabled:cursor-not-allowed  rounded-full flex justify-center items-center disabled:opacity-20"
+                            className="bg-mainColor text-white   w-7 h-7 disabled:cursor-not-allowed  rounded-full flex justify-center items-center disabled:opacity-20"
                           >
                             -
                           </button>
                           <span>{ele?.quantity}</span>
                           <button
                             onClick={() =>
-                              addToCart(ele.quantity + 1, ele?.product?._id)
+                              addToCartHandler(
+                                ele?.quantity + 1,
+                                ele?.product?._id,
+                                ele.sizeName,
+                                ele.extrasName
+                              )
                             }
-                            className="bg-[#dadada] w-7 h-7  rounded-full flex justify-center items-center"
+                            className="bg-mainColor text-white w-7 h-7  rounded-full flex justify-center items-center"
                           >
                             +
                           </button>
@@ -124,20 +154,15 @@ export default function Cart() {
                       </td>
                       <td>
                         $
-                        {(
-                          ele?.product?.price *
-                          (1 - ele?.product?.promoPercentage / 100) *
-                          ele?.quantity
-                        ).toFixed(2)}
+                        {(calculateAmountHandler(ele) * ele?.quantity).toFixed(
+                          2
+                        )}
                       </td>
                       <td>
-                        <div className="mx-auto w-fit cursor-pointer  text-bgColorDanger">
-                          <FaTrash
+                        <div className="mx-auto w-fit cursor-pointer bg-white p-2 rounded-xl  text-bgColorDanger">
+                          <FaRegTrashCan
                             onClick={() =>
-                              removeFromCartHandler(
-                                user?._id,
-                                ele?.product?._id
-                              )
+                              removeFromCartHandler(user?._id, ele?._id)
                             }
                           />
                         </div>
@@ -148,81 +173,16 @@ export default function Cart() {
               </table>
             </div>
           </div>
-          <div className="bg-bgColorCartFooter py-6">
-            <div className="container my-6 flex lg:flex-row flex-col items-center gap-y-8 justify-between ">
-              <div className="flex flex-col text-center ">
-                <p className="text-xl font-bold">Discount Codes</p>
-                <p className="opacity-60">
-                  Enter your coupon code if you have one
-                </p>
-                <div className="my-2 flex border-solid border-mainColor">
-                  <input
-                    placeholder="enter your coupon"
-                    className="rounded-l-xl  py-2 pl-3 focus:outline-none"
-                    type="text"
-                    onChange={(e) => setCoupon(e.target.value)}
-                    value={coupon}
-                  />
-                  <button
-                    disabled={coupon == ""}
-                    onClick={() => couponHandler()}
-                    className="rounded-r-xl disabled:opacity-50 disabled:cursor-not-allowed bg-mainColor px-4 text-sm sm:text-base text-white"
-                  >
-                    Apply Coupon
-                  </button>
-                </div>
-              </div>
-              <div className="flex flex-col items-center gap-5 rounded-xl border-2 border-mainColor px-9 py-3">
-                <p className="font-bold">Order Summary</p>
-                <div className="flex flex-row gap-3">
-                  <div className="flex flex-col gap-2">
-                    <p>Sub Total </p>
-                    <p>Shipping</p>
-                    <p>Grand Total</p>
-                  </div>
-                  <div className="flex flex-col gap-2">
-                    <p>
-                      $
-                      {cart
-                        ?.reduce(
-                          (acc, curr) =>
-                            curr?.product?.price *
-                              (1 - curr?.product?.promoPercentage / 100) *
-                              curr?.quantity +
-                            acc,
-                          0
-                        )
-                        .toFixed(2)}{" "}
-                    </p>
-                    <p className="">Free</p>
-                    <p>
-                      $
-                      {cart
-                        ?.reduce(
-                          (acc, curr) =>
-                            curr?.product?.price *
-                              (1 - curr?.product?.promoPercentage / 100) *
-                              curr?.quantity +
-                            acc,
-                          0
-                        )
-                        .toFixed(2) - 0}{" "}
-                      {/* minus 0 becase the shiping is free*/}
-                    </p>
-                  </div>
-                </div>
-              </div>
+
+          <button
+            onClick={() => checkoutHandler()}
+            className="my-12 animation-right-arrow-father mx-auto flex items-center gap-2 rounded-xl bg-mainColor px-4 py-2 text-sm text-white"
+          >
+            <p>Proceed To Checkout</p>
+            <div className="animation-right-arrow">
+              <FaArrowRight />
             </div>
-            <button
-              onClick={() => checkoutHandler()}
-              className="animation-right-arrow-father mx-auto flex items-center gap-2 rounded-xl bg-mainColor px-4 py-2 text-sm text-white"
-            >
-              <p>Proceed To Checkout</p>
-              <div className="animation-right-arrow">
-                <FaArrowRight />
-              </div>
-            </button>
-          </div>
+          </button>
         </>
       ) : (
         <>
@@ -236,15 +196,15 @@ export default function Cart() {
               width={300}
               height={300}
             />
-            <p className="my-6 mb-2 text-3xl font-bold">
-              Your cart is empty and sad :(
+            <p className="my-6 text-mainColor mb-2 text-3xl font-bold">
+              Your cart is empty :(
             </p>
-            <p className="opacity-60">Add something to make it happy!</p>
+            <p className="opacity-60">Hungry? Add Some Product</p>
             <Link
               to="/store"
               className="mt-6 rounded-xl bg-mainColor px-6 py-2  text-white"
             >
-              Continue Shoping
+              Browse Menu
             </Link>
           </div>
         </>

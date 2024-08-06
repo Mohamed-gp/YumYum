@@ -35,18 +35,18 @@ function App() {
         <Route path="/store" element={<Store />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/order/success" element={<OrderConfirmed />} />
-        <Route path="/wishlist" element={<Wishlist />} />
-        <Route path="/aboutus" element={<AboutUs />} />
+        {/* <Route path="/wishlist" element={<Wishlist />} /> */}
+        {/* <Route path="/aboutus" element={<AboutUs />} /> */}
         <Route
           path={"/register"}
           element={user ? <Navigate to="/" /> : <Register />}
         />
         <Route path="/login" element={user ? <Navigate to="/" /> : <Login />} />
-        <Route
+        {/* <Route
           path="/profile"
           element={!user ? <Navigate to="/" /> : <Profile />}
-        />
-        <Route path="/product/:id" element={<ProductInfo />} />
+        /> */}
+        {/* <Route path="/product/:id" element={<ProductInfo />} /> */}
         <Route path="/admin">
           <Route
             path="users"
@@ -60,7 +60,7 @@ function App() {
               user?.role == "admin" ? <AdminProducts /> : <Navigate to={"/"} />
             }
           />
-            {/* <Route
+          {/* <Route
               path="products/edit/:id"
               element={
                 user?.role == "admin" ? (
@@ -108,6 +108,12 @@ function App() {
               user?.role == "admin" ? <AdminAdmins /> : <Navigate to={"/"} />
             }
           />
+          {/* <Route
+            path="orders"
+            element={
+              user?.role == "admin" ? <AdminOrders /> : <Navigate to={"/"} />
+            }
+          /> */}
           <Route
             path="profile"
             element={

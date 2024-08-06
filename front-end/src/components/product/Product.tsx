@@ -24,7 +24,6 @@ export default function Product({ product }: productProps) {
         productId,
       });
       dispatch(authActions.setWishlist(data.data));
-      console.log(data.data);
       toast.success(data.message);
     } catch (error: any) {
       console.log(error);

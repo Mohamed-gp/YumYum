@@ -4,13 +4,13 @@
 import { useEffect, useState } from "react";
 import SectionHeaders from "../SectionHeaders/SectionHeaders";
 import customAxios from "../../utils/axios/customAxios";
+import ProductCard from "../productCard/ProductCard";
 
 export default function HomeMenu() {
   const [ourBest, setOurBest] = useState([]);
   const getOurBest = async () => {
     try {
       const { data } = await customAxios.get("/products/featured");
-      console.log(data);
       setOurBest(data.data);
     } catch (error) {
       console.log(error);
@@ -18,9 +18,9 @@ export default function HomeMenu() {
   };
   useEffect(() => {
     getOurBest();
+    scrollTo(0, 0);
   }, []);
 
- 
   return (
     <section className="container my-12">
       <div className="absolute left-0 right-0 w-full justify-start">
@@ -36,60 +36,8 @@ export default function HomeMenu() {
       </div>
       <div className="my-12 relative container flex gap-6 lg:flex-row lg:justify-evenly flex-col">
         {ourBest.map((product: any) => (
-          <>
-            <div
-              style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px" }}
-              className="lg:w-[30%] bg-white p-6 pt-0 text-center rounded-xl flex flex-col  justify-center items-center"
-            >
-              <img src={product?.image} className="w-[200px]" alt="" />
-              <p className="font-bold text-lg sm:text-xl line-clamp-3">
-                {product?.name}
-              </p>
-              <p className="opacity-50 line-clamp-3 ">{product?.description}</p>
-              <button
-  
-                className="text-white bg-mainColor w-full sm:text-base text-sm mt-2 py-2 rounded-xl"
-              >
-                {(product.sizes.length > 1 || product.extras.length > 0) &&
-                  `start from ${product?.basePrice}`}
-              </button>
-            </div>
-            <div className="absolute"></div>
-          </>
+          <ProductCard product={product} />
         ))}
-        {/* <div
-          style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px" }}
-          className="lg:w-[30%] flex flex-col text-center bg-white p-6 pt-0 rounded-xl justify-center items-center"
-        >
-          <img src="/Pizza-removebg-preview.png" alt="" className="w-[200px]" />
-          <p className="font-bold text-xl">Margherita Pizza</p>
-          <p className="opacity-50 line-clamp-3">
-            Indulge in the simplicity and freshness of a traditional Margherita
-            pizza. Featuring a thin, crispy crust topped with vibrant tomato
-            sauce,
-          </p>
-          <p className="text-white bg-mainColor w-full mt-2 py-2 rounded-xl">
-            Add To Cart
-          </p>
-        </div>
-        <div
-          style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px" }}
-          className="lg:w-[30%] flex flex-col text-center bg-white p-6 pt-0 rounded-xl justify-center items-center"
-        >
-          <img
-            src="/roastedChicken-removebg-preview.png"
-            alt=""
-            className="w-[200px]"
-          />
-          <p className="font-bold text-xl">Roasted Chicken</p>
-          <p className="opacity-50 my-1 line-clamp-3">
-            Savor the deliciousness of perfectly roasted chicken, featuring a
-            crispy golden skin and juicy, tender meat.
-          </p>
-          <p className="text-white bg-mainColor w-full mt-2 py-2 rounded-xl">
-            Add To Cart
-          </p>
-        </div> */}
       </div>
     </section>
   );

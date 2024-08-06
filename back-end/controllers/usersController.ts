@@ -61,7 +61,6 @@ const updateUserData = async (
       try {
         const picture = file.path;
         const uploadedPicture = await cloudinary.uploader.upload(picture);
-        console.log(uploadedPicture);
         const pictureUrl = uploadedPicture.url;
         user.photoUrl = pictureUrl;
         removeFiles();

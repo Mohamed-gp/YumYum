@@ -1,12 +1,11 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-*{
+* {
   scroll-behavior: smooth;
 }
 
 body {
-
   overflow-x: hidden;
   background-color: #f4ece1;
 }
@@ -69,7 +68,7 @@ td {
 table tbody tr::after {
   content: "";
   position: absolute;
-  background-color: #00c2ff;
+  background-color: #ff7e00;
   height: 0.1px;
   bottom: 0;
   width: 95%;
@@ -131,5 +130,9 @@ table tbody tr::after {
 
 thead,
 tr:not(:last-child) {
-  border-bottom: 1px solid #00c2ff;
+  border-bottom: 1px solid #ff7e00;
+}
+
+.button-w-full {
+  width: 100% !important;
 }

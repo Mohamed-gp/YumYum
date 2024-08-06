@@ -1,13 +1,25 @@
+import { useEffect } from "react";
 import { FaEdit } from "react-icons/fa";
 import { FaTrash } from "react-icons/fa6";
 import { Link } from "react-router-dom";
+import customAxios from "../../../utils/axios/customAxios";
 
 const AdminOrdersRight = () => {
+  const getCartsHandler = async () => {
+    try {
+      const { data } = await customAxios.get("/cart");
+      console.log(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    getCartsHandler();
+  }, []);
   return (
     <div className="p-6 flex-1">
-      <p className="lg:text-2xl">Products</p>
       <table className="w-full">
-        <thead>
+        <thead className="font-bold">
           <tr>
             <td>DATE</td>
             <td>PAID</td>
@@ -22,10 +34,18 @@ const AdminOrdersRight = () => {
             <td>John Doe</td>
             <td>
               <div className="flex flex-col">
-                <p>macbook 13 <span className="text-red-500">x1</span></p>
-                <p>iphone 15 pro max <span className="text-red-500">x1</span></p>
-                <p>redmi note 10 pro <span className="text-red-500">x1</span></p>
-                <p>redmi note 11 <span className="text-red-500">x1</span></p>
+                <p>
+                  macbook 13 <span className="text-red-500">x1</span>
+                </p>
+                <p>
+                  iphone 15 pro max <span className="text-red-500">x1</span>
+                </p>
+                <p>
+                  redmi note 10 pro <span className="text-red-500">x1</span>
+                </p>
+                <p>
+                  redmi note 11 <span className="text-red-500">x1</span>
+                </p>
               </div>
             </td>
           </tr>
@@ -35,10 +55,18 @@ const AdminOrdersRight = () => {
             <td>John Doe</td>
             <td>
               <div className="flex flex-col">
-                <p>macbook 13 <span className="text-red-500">x1</span></p>
-                <p>iphone 15 pro max <span className="text-red-500">x1</span></p>
-                <p>redmi note 10 pro <span className="text-red-500">x1</span></p>
-                <p>redmi note 11 <span className="text-red-500">x1</span></p>
+                <p>
+                  macbook 13 <span className="text-red-500">x1</span>
+                </p>
+                <p>
+                  iphone 15 pro max <span className="text-red-500">x1</span>
+                </p>
+                <p>
+                  redmi note 10 pro <span className="text-red-500">x1</span>
+                </p>
+                <p>
+                  redmi note 11 <span className="text-red-500">x1</span>
+                </p>
               </div>
             </td>
           </tr>
@@ -48,10 +76,18 @@ const AdminOrdersRight = () => {
             <td>John Doe</td>
             <td>
               <div className="flex flex-col">
-                <p>macbook 13 <span className="text-red-500">x1</span></p>
-                <p>iphone 15 pro max <span className="text-red-500">x1</span></p>
-                <p>redmi note 10 pro <span className="text-red-500">x1</span></p>
-                <p>redmi note 11 <span className="text-red-500">x1</span></p>
+                <p>
+                  macbook 13 <span className="text-red-500">x1</span>
+                </p>
+                <p>
+                  iphone 15 pro max <span className="text-red-500">x1</span>
+                </p>
+                <p>
+                  redmi note 10 pro <span className="text-red-500">x1</span>
+                </p>
+                <p>
+                  redmi note 11 <span className="text-red-500">x1</span>
+                </p>
               </div>
             </td>
           </tr>
@@ -61,10 +97,18 @@ const AdminOrdersRight = () => {
             <td>John Doe</td>
             <td>
               <div className="flex flex-col">
-                <p>macbook 13 <span className="text-red-500">x1</span></p>
-                <p>iphone 15 pro max <span className="text-red-500">x1</span></p>
-                <p>redmi note 10 pro <span className="text-red-500">x1</span></p>
-                <p>redmi note 11 <span className="text-red-500">x1</span></p>
+                <p>
+                  macbook 13 <span className="text-red-500">x1</span>
+                </p>
+                <p>
+                  iphone 15 pro max <span className="text-red-500">x1</span>
+                </p>
+                <p>
+                  redmi note 10 pro <span className="text-red-500">x1</span>
+                </p>
+                <p>
+                  redmi note 11 <span className="text-red-500">x1</span>
+                </p>
               </div>
             </td>
           </tr>

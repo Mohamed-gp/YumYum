@@ -1,4 +1,5 @@
 import { FaCartShopping } from "react-icons/fa6";
+import { MdFileDownload } from "react-icons/md";
 import { Link } from "react-router-dom";
 
 export default function Hero() {
@@ -22,20 +23,19 @@ export default function Hero() {
           </p>
           <div className=" flex-wrap my-6 flex items-center justify-center gap-3 font-bold lg:justify-normal">
             <Link
-              to={`/food/`}
+              to={`/store`}
               className="text-center rounded-xl bg-white px-3 py-1 text-[#201F20] border-2"
             >
-              Read More
+              Get Some Food
             </Link>
-            <button
-              onClick={() => {
-                // addToCart();
-              }}
-              className="flex   items-center gap-1 rounded-xl bg-mainColor px-3 py-1 text-white"
+            <a
+              href="/CV.pdf"
+              download
+              className="flex items-center justify-center w-full bg-mainColor text-white gap-2 px-3 py-1  font-semibold duration-300  border rounded-full  group hover:scale-105 sm:w-auto sm:justify-normal"
             >
-              <p>Add To Cart</p>
-              <FaCartShopping />
-            </button>
+              <p>Download Our APK</p>
+              <MdFileDownload className="duration-500 group-hover:translate-y-[3px] " />
+            </a>
           </div>
         </div>
 

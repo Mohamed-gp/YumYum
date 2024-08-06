@@ -54,7 +54,9 @@ export default function HeaderRight() {
       >
         <FaCartShopping />
         {user && user?.cart?.length != 0 && (
-          <span className="absolute  bg-mainColor -right-1 -top-1 w-[13px] h-[13px] rounded-full"></span>
+          <div className="absolute flex justify-center items-center text-[14px]  text-white bg-mainColor font-bold -right-2 -top-2 w-[19px] h-[19px] rounded-full text-center   ">
+            {user?.cart?.length}
+          </div>
         )}
       </Link>
     </div>

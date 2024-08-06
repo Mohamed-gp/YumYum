@@ -15,8 +15,21 @@ const createPayment = async (
     const lineItems = await Promise.all(
       cart.map(async (ele: any) => {
         const product = await Product.findById(ele.product._id);
-        let amount =
-          product?.price * 100 * (1 - product?.promoPercentage / 100);
+        let amount = product?.basePrice * 100;
+
+        product.sizes.map((size: any) => {
+          if (size.name == ele.sizeName) {
+            amount = amount + size.price * 100;
+          }
+        });
+        product.extras.map((extra: any) => {
+          ele.extrasName.map((exName: string) => {
+            if (extra.name == exName) {
+              amount = amount + extra.price * 100;
+            }
+          });
+        });
+
         amount = Math.ceil(amount);
         return {
           price_data: {

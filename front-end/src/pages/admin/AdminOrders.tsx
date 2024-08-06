@@ -4,7 +4,6 @@ import { IRootState } from "../../redux/store";
 import AdminOrdersRight from "../../components/admin/adminOrders/AdminOrdersRight";
 
 export default function AdminOrders() {
-  const { user } = useSelector((state: IRootState) => state.auth);
   return (
     <div className="flex flex-col container min-h-screen">
       <AdminSideBar />

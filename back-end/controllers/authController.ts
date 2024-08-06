@@ -17,7 +17,13 @@ const loginController = async (
     }
     const user = await User.findOne({
       email,
-    });
+    }).populate({
+      path: "cart",
+      populate: {
+        path: "product",
+        model: "Product",
+      },
+    });;
 
     if (!user) {
       return res.status(404).json({
@@ -71,8 +77,8 @@ const registerController = async (
     }
     let user = await User.findOne({
       email,
-    })
-     
+    });
+
     if (user) {
       return res
         .status(400)
@@ -111,8 +117,13 @@ const googleSignIncontroller = async (
 ) => {
   const { username, email, photoUrl } = req.body;
   try {
-    let user = await User.findOne({ email })
-     
+    let user = await User.findOne({ email }).populate({
+      path: "cart",
+      populate: {
+        path: "product",
+        model: "Product",
+      },
+    });
 
     if (user) {
       const token = jwt.sign(
