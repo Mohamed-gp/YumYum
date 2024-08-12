@@ -8,6 +8,7 @@ import { authActions } from "../../redux/slices/authSlice";
 import { useDispatch } from "react-redux";
 
 export default function Register() {
+
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   const [formData, setformData] = useState({

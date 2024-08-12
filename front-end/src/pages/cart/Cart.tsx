@@ -87,11 +87,11 @@ export default function Cart() {
       {cart?.length != 0 ? (
         <>
           <div className="" style={{ minHeight: "calc(100vh - 250px)" }}>
-            <p className="my-6 mt-12 text-center text-xl font-bold">
+            <p className="my-6 mt-12 text-center  sm:text-xl font-bold">
               My Shopping Cart
             </p>
-            <div className="container  ">
-              <table className=" w-full ">
+            <div className="min-w-[100px]  overflow-auto text-[10px] sm:text-base">
+              <table className="w-full ">
                 <tbody>
                   {cart?.map((ele) => (
                     <tr className="relative">
@@ -111,7 +111,7 @@ export default function Cart() {
                           <p>
                             {ele?.product?.name} ({ele?.sizeName})
                           </p>
-                          <p>
+                          <p className="phone ">
                             {ele?.extrasName?.map((size) => {
                               return ` +${size}`;
                             })}

@@ -136,3 +136,10 @@ tr:not(:last-child) {
 .button-w-full {
   width: 100% !important;
 }
+
+
+@media (max-width : 400px) {
+  .phone{
+    display: none;
+  }
+}

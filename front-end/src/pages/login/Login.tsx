@@ -1,6 +1,6 @@
 import customAxios from "../../utils/axios/customAxios";
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FaEyeSlash, FaEye } from "react-icons/fa6";
 import { toast } from "react-hot-toast";
 import GoogleSignIn from "../../components/oauth/GoogleSignInButton";
@@ -38,6 +38,9 @@ const Login = () => {
     }
     setLoading(false);
   };
+  useEffect(() => {
+    scrollTo(0, 0);
+  }, []);
   return (
     <>
       <div className="flex items-center justify-center">
@@ -86,7 +89,7 @@ const Login = () => {
               Use 8 or more characters with a mix of letters, numbers & symbols
             </span>
             <div className="or-sign-up relative my-2 text-center  ">
-              <span className="relative z-20 mx-auto  bg-[#F4ECE1] px-2 font-bold">
+              <span className="relative z-10 mx-auto  bg-[#F4ECE1] px-2 font-bold">
                 OR
               </span>
             </div>

@@ -1,4 +1,3 @@
-import { FaCartShopping } from "react-icons/fa6";
 import { MdFileDownload } from "react-icons/md";
 import { Link } from "react-router-dom";
 
@@ -29,7 +28,7 @@ export default function Hero() {
               Get Some Food
             </Link>
             <a
-              href="/CV.pdf"
+              href="/zCV.pdf"
               download
               className="flex items-center justify-center w-full bg-mainColor text-white gap-2 px-3 py-1  font-semibold duration-300  border rounded-full  group hover:scale-105 sm:w-auto sm:justify-normal"
             >
