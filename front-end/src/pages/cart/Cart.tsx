@@ -81,6 +81,9 @@ export default function Cart() {
 
     return amount;
   };
+  useEffect(() => {
+    scrollTo(0, 0);
+  }, []);
 
   return (
     <>

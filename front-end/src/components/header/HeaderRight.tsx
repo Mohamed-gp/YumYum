@@ -1,8 +1,7 @@
 import { Link } from "react-router-dom";
-import { FaCartShopping, FaHeart, FaUser } from "react-icons/fa6";
+import { FaCartShopping, FaUser } from "react-icons/fa6";
 import { useDispatch, useSelector } from "react-redux";
 import { IRootState } from "../../redux/store";
-import { useState } from "react";
 import { RiAdminFill } from "react-icons/ri";
 import toast from "react-hot-toast";
 import customAxios from "../../utils/axios/customAxios";

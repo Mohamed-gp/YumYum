@@ -19,7 +19,7 @@ const AdminSideBar = () => {
       <AdminSideBarLink link="Categories" />
       <AdminSideBarLink link="Menu" />
       <AdminSideBarLink link="admins" />
-      <AdminSideBarLink link="orders" />
+      {/* <AdminSideBarLink link="orders" /> */}
       {/* <AdminSideBarLink link="users" /> */}
       {/* <AdminSideBarLink link="coupons" icon={<RiCoupon3Fill />} /> */}
       {/* <AdminSideBarLink link="Orders" /> */}

@@ -27,14 +27,21 @@ export default function Hero() {
             >
               Get Some Food
             </Link>
-            <a
+            {/* <a
               href="/zCV.pdf"
               download
               className="flex items-center justify-center w-full bg-mainColor text-white gap-2 px-3 py-1  font-semibold duration-300  border rounded-full  group hover:scale-105 sm:w-auto sm:justify-normal"
             >
               <p>Download Our APK</p>
               <MdFileDownload className="duration-500 group-hover:translate-y-[3px] " />
-            </a>
+            </a> */}
+            <Link
+              to={`/inprogressapp`}
+              className="flex items-center justify-center w-full bg-mainColor text-white gap-2 px-3 py-1  font-semibold duration-300  border rounded-full  group hover:scale-105 sm:w-auto sm:justify-normal"
+            >
+              <p>Download Our APK</p>
+              <MdFileDownload className="duration-500 group-hover:translate-y-[3px] " />
+            </Link>
           </div>
         </div>
 

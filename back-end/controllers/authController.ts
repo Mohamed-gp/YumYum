@@ -23,7 +23,7 @@ const loginController = async (
         path: "product",
         model: "Product",
       },
-    });;
+    });
 
     if (!user) {
       return res.status(404).json({
@@ -48,11 +48,13 @@ const loginController = async (
       }
     );
     res
-      .cookie("token", token, {
+      .cookie("yumyum-token", token, {
         httpOnly: true,
-        sameSite: "None" as "none",
-        maxAge: 1000 * 60 * 60 * 24 * 365,
-        secure: process.env.NODE_ENV == "developement" ? false : true,
+        sameSite: "none",
+        secure: process.env.NODE_ENV === "development" ? false : true,
+        domain: (process.env.NODE_ENV = "development"
+          ? "localhost"
+          : "production-server.tech"),
       })
       .status(200)
       .json({ message: "login successfully", data: user });
@@ -97,11 +99,13 @@ const registerController = async (
       { expiresIn: "1y" }
     );
     res
-      .cookie("token", token, {
-        maxAge: 1000 * 60 * 60 * 24 * 365,
+      .cookie("yumyum-token", token, {
         httpOnly: true,
-        secure: process.env.NODE_ENV == "developement" ? false : true,
-        sameSite: "None" as "none",
+        sameSite: "none",
+        secure: process.env.NODE_ENV === "development" ? false : true,
+        domain: (process.env.NODE_ENV = "development"
+          ? "localhost"
+          : "production-server.tech"),
       })
       .status(201)
       .json({ data: user, message: "created succefully" });
@@ -135,11 +139,13 @@ const googleSignIncontroller = async (
       );
       user.password = "";
       return res
-        .cookie("token", token, {
+        .cookie("yumyum-token", token, {
           httpOnly: true,
-          secure: process.env.NODE_ENV == "developement" ? false : true,
-          maxAge: 1000 * 60 * 60 * 24 * 365,
-          sameSite: "None" as "none",
+          sameSite: "none",
+          secure: process.env.NODE_ENV === "development" ? false : true,
+          domain: (process.env.NODE_ENV = "development"
+            ? "localhost"
+            : "production-server.tech"),
         })
         .status(200)
         .json({ data: user, message: "login successfully" });
@@ -164,11 +170,13 @@ const googleSignIncontroller = async (
       );
       user.password = "";
       return res
-        .cookie("token", token, {
+        .cookie("yumyum-token", token, {
           httpOnly: true,
-          secure: process.env.NODE_ENV == "developement" ? false : true,
-          maxAge: 1000 * 60 * 60 * 24 * 365,
-          sameSite: "None" as "none",
+          sameSite: "none",
+          secure: process.env.NODE_ENV === "development" ? false : true,
+          domain: (process.env.NODE_ENV = "development"
+            ? "localhost"
+            : "production-server.tech"),
         })
         .status(200)
         .json({ data: user, message: "login successfully" });

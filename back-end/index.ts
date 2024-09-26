@@ -18,17 +18,21 @@ dotenv.config();
 const app = express();
 
 connectToDB(process.env.MONGODB_URI as string);
-const PORT = 3000;
+const PORT = process.env.PORT || 3003;
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(
   cors({
     origin:
-      process.env.NODE_ENV == "developement"
-        ? "http://localhost:5173"
-        : "https://social-sync1.netlify.app",
-    // origin: "http://localhost:5173",
+      process.env.NODE_ENV == "development"
+        ? [
+            "http://localhost:5173",
+            "http://localhost:8081",
+            "http://192.168.1.7:8081",
+            "http://localhost:5003",
+          ]
+        : "https://yumyum.production-server.tech",
     credentials: true,
   })
 );
